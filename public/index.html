@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8"/>
+    <title>IT yo‘nalish moslik testi</title>
+    <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+<div class="page">
+    <header class="header">
+        <h1>Dasturlashdagi yo'lingizni bizning quiz orqali oson tanlang</h1>
+        <p>Bir nechta savollarga javob bering va sizga mos yo‘nalishlarni foizlarda bilib oling.</p>
+    </header>
+
+    <main>
+        <section id="start-screen">
+            <button id="start-btn" class="btn primary">Testni boshlash</button>
+        </section>
+
+        <section id="quiz-screen" class="hidden">
+            <div class="quiz-header">
+                <div id="progress-text"></div>
+                <div id="progress-bar">
+                    <div id="progress-fill"></div>
+                </div>
+            </div>
+
+            <div id="question-box">
+                <h2 id="question-text"></h2>
+                <div id="options-container"></div>
+            </div>
+
+            <div class="quiz-actions">
+                <button id="prev-btn" class="btn" disabled>Ortga</button>
+                <button id="next-btn" class="btn primary">Keyingi</button>
+            </div>
+        </section>
+
+        <section id="result-screen" class="hidden">
+            <h2>Natijalar</h2>
+            <p>Sizning qiziqishlaringizga mos IT yo‘nalishlar:</p>
+            <div id="results-container"></div>
+
+            <div class="result-actions">
+                <button id="restart-btn" class="btn">Qayta yechish</button>
+                <button id="stats-btn" class="btn primary">Umumiy statistika</button>
+            </div>
+
+            <div id="stats-panel" class="stats-panel hidden">
+                <h3>Platformadagi umumiy statistika</h3>
+                <p id="stats-summary" class="stats-summary"></p>
+                <div id="stats-container"></div>
+            </div>
+        </section>
+    </main>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
