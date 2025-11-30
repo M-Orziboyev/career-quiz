@@ -165,7 +165,10 @@ const QUESTIONS = [
 let currentIndex = 0;
 // Har bir savol uchun tanlangan option index (yoki null)
 let answers = new Array(QUESTIONS.length).fill(null);
-
+let userInfo = {
+    name: "",
+    level: "newbie",
+};
 // DOM elementlar
 const startScreen = document.getElementById("start-screen");
 const quizScreen = document.getElementById("quiz-screen");
@@ -175,6 +178,9 @@ const startBtn = document.getElementById("start-btn");
 const prevBtn = document.getElementById("prev-btn");
 const nextBtn = document.getElementById("next-btn");
 const restartBtn = document.getElementById("restart-btn");
+
+const nameInput = document.getElementById("name-input");
+const levelSelect = document.getElementById("level-select");
 
 const statsBtn = document.getElementById("stats-btn");
 const statsPanel = document.getElementById("stats-panel");
@@ -191,6 +197,18 @@ const resultsContainer = document.getElementById("results-container");
 
 // Boshlash
 startBtn.addEventListener("click", () => {
+    const name = (nameInput.value || "").trim();
+    const level = levelSelect.value || "newbie";
+
+    if (!name) {
+        alert("Iltimos, ismingizni kiriting.");
+        nameInput.focus();
+        return;
+    }
+
+    userInfo.name = name;
+    userInfo.level = level;
+
     startScreen.classList.add("hidden");
     quizScreen.classList.remove("hidden");
     renderQuestion();
@@ -304,6 +322,17 @@ function showResults() {
     // UI
     quizScreen.classList.add("hidden");
     resultScreen.classList.remove("hidden");
+    const name = userInfo.name || "Siz";
+    resultsContainer.innerHTML = "";
+    const headerText = document.createElement("p");
+    headerText.style.fontSize = "14px";
+    headerText.style.marginBottom = "10px";
+
+    const topDomain = results[0]?.domain;
+    let topLabel = topDomain ? DOMAIN_LABELS[topDomain] : "";
+    headerText.textContent = `${name}, sizning javoblaringiz bo‘yicha eng yaqin yo‘nalish: ${topLabel}. Quyidabarcha yo‘nalishlar  bo‘yicha foizlar:`;
+
+    resultsContainer.appendChild(headerText);
     resultsContainer.innerHTML = "";
 
     results.forEach((r) => {
@@ -362,6 +391,7 @@ function saveResults(results) {
         headers: {"Content-Type": "application/json"},
         body: JSON.stringify({
             timestamp: new Date().toISOString(),
+            user: userInfo,
             results,
         }),
     }).catch((err) => {

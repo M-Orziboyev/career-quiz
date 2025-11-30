@@ -14,7 +14,29 @@
 
     <main>
         <section id="start-screen">
-            <button id="start-btn" class="btn primary">Testni boshlash</button>
+            <div class="start-card">
+                <h2>Testni boshlashdan oldin</h2>
+                <p class="start-note">
+                    Ismingizni va taxminiy darajangizni kiriting. Bu natijani shaxsiylashtirish uchun kerak.
+                </p>
+
+                <div class="form-group">
+                    <label for="name-input">Ismingiz</label>
+                    <input id="name-input" type="text" placeholder="Ali, Laylo, ..."/>
+                </div>
+
+                <div class="form-group">
+                    <label for="level-select">Dasturlash bo‘yicha hozirgi darajangiz</label>
+                    <select id="level-select">
+                        <option value="newbie">Yangi boshlayapman</option>
+                        <option value="junior">Junior darajada</option>
+                        <option value="mid">O‘rtacha tajribam bor</option>
+                        <option value="switch">Boshqa sohani tark etib ITga o‘tyapman</option>
+                    </select>
+                </div>
+
+                <button id="start-btn" class="btn primary">Testni boshlash</button>
+            </div>
         </section>
 
         <section id="quiz-screen" class="hidden">
