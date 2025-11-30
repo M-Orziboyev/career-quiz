@@ -169,6 +169,7 @@ let userInfo = {
     name: "",
     level: "newbie",
 };
+let lastResultsForCopy = [];
 // DOM elementlar
 const startScreen = document.getElementById("start-screen");
 const quizScreen = document.getElementById("quiz-screen");
@@ -195,6 +196,10 @@ const progressFill = document.getElementById("progress-fill");
 
 const resultsContainer = document.getElementById("results-container");
 
+const userChip = document.getElementById("user-chip");
+const copyBtn = document.getElementById("copy-btn");
+const roadmapContainer = document.getElementById("roadmap-container");
+
 // Boshlash
 startBtn.addEventListener("click", () => {
     const name = (nameInput.value || "").trim();
@@ -209,11 +214,17 @@ startBtn.addEventListener("click", () => {
     userInfo.name = name;
     userInfo.level = level;
 
+    // user chip text
+    userChip.innerHTML = `
+        <span>${name}</span>
+        <span class="user-chip-level">${getLevelLabel(level)}</span>
+    `;
+    userChip.classList.remove("hidden");
+
     startScreen.classList.add("hidden");
     quizScreen.classList.remove("hidden");
     renderQuestion();
 });
-
 // Ortga
 prevBtn.addEventListener("click", () => {
     if (currentIndex > 0) {
@@ -243,6 +254,11 @@ nextBtn.addEventListener("click", () => {
 restartBtn.addEventListener("click", () => {
     currentIndex = 0;
     answers = new Array(QUESTIONS.length).fill(null);
+    userInfo = {name: "", level: "newbie"};
+    nameInput.value = "";
+    levelSelect.value = "newbie";
+    userChip.classList.add("hidden");
+
     resultScreen.classList.add("hidden");
     startScreen.classList.remove("hidden");
 });
@@ -250,6 +266,10 @@ restartBtn.addEventListener("click", () => {
 statsBtn.addEventListener("click", () => {
     loadStats();
 })
+
+copyBtn.addEventListener("click", () => {
+    copySummary(lastResultsForCopy);
+});
 
 // Savolni render qilish
 function renderQuestion() {
@@ -297,7 +317,6 @@ function renderQuestion() {
 
 // Natijani hisoblash
 function showResults() {
-    // Domen bo'yicha ballar
     const scores = {};
     DOMAINS.forEach((d) => (scores[d] = 0));
 
@@ -312,31 +331,31 @@ function showResults() {
 
     const total = Object.values(scores).reduce((sum, v) => sum + v, 0) || 1;
 
-    // Domen + foizlar ro'yxati
     const results = DOMAINS.map((d) => ({
         domain: d,
         score: scores[d],
         pct: Math.round((scores[d] * 100) / total),
     })).sort((a, b) => b.pct - a.pct);
 
-    // UI
+    lastResultsForCopy = results; // 📌 keyin copy uchun saqlab qo'yamiz
+
     quizScreen.classList.add("hidden");
     resultScreen.classList.remove("hidden");
-    const name = userInfo.name || "Siz";
     resultsContainer.innerHTML = "";
+    roadmapContainer.innerHTML = "";
+
+    const name = userInfo.name || "Siz";
+    const topDomain = results[0]?.domain;
+    const topLabel = topDomain ? DOMAIN_LABELS[topDomain] : "tanlanmagan";
+
     const headerText = document.createElement("p");
     headerText.style.fontSize = "14px";
     headerText.style.marginBottom = "10px";
-
-    const topDomain = results[0]?.domain;
-    let topLabel = topDomain ? DOMAIN_LABELS[topDomain] : "";
-    headerText.textContent = `${name}, sizning javoblaringiz bo‘yicha eng yaqin yo‘nalish: ${topLabel}. Quyidabarcha yo‘nalishlar  bo‘yicha foizlar:`;
-
+    headerText.textContent = ` ${name}, sizning javoblaringiz bo‘yicha eng yaqin yo‘nalish: ${topLabel}. Quyida barcha yo‘nalishlar bo‘yicha foizlar:`;
     resultsContainer.appendChild(headerText);
-    resultsContainer.innerHTML = "";
 
     results.forEach((r) => {
-        if (r.score === 0) return; // umuman ball bo'lmasa, ko'rsatmasak ham bo'ladi
+        if (r.score === 0) return;
 
         const item = document.createElement("div");
         item.className = "result-item";
@@ -367,7 +386,14 @@ function showResults() {
 
         resultsContainer.appendChild(item);
     });
-    saveResults(results)
+
+    // Roadmap chiqarish
+    if (topDomain) {
+        renderRoadmap(topDomain);
+    }
+
+    // Backendga saqlash
+    saveResults(results);
 }
 
 function getAdvice(domain) {
@@ -451,4 +477,117 @@ function loadStats() {
                 "Statistikani yuklashda xato yuz berdi. Keyinroq qayta urinib ko‘ring.";
             statsContainer.innerHTML = "";
         });
+}
+
+function getLevelLabel(level) {
+    switch (level) {
+        case "newbie":
+            return "Yangi boshlovchi";
+        case "junior":
+            return "Junior";
+        case "mid":
+            return "O‘rta daraja";
+        case "switch":
+            return "ITga o‘tayotgan";
+        default:
+            return level;
+    }
+}
+
+function renderRoadmap(domain) {
+    const steps = getRoadmapSteps(domain);
+    if (!steps || steps.length === 0) {
+        roadmapContainer.innerHTML = "";
+        return;
+    }
+
+    const name = userInfo.name || "Siz";
+
+    roadmapContainer.innerHTML = `
+        <h3>${DOMAIN_LABELS[domain]} uchun keyingi qadamlar</h3>
+    <p style="font-size:13px; color:#555; margin-bottom:6px;">
+        ${name}, agar shu yo‘nalish sizga yoqsa, quyidagi qisqa yo‘l xaritasidan boshlasangiz bo‘ladi:
+    </p>`
+    ;
+
+    const ul = document.createElement("ul");
+    steps.forEach((s) => {
+        const li = document.createElement("li");
+        li.textContent = s;
+        ul.appendChild(li);
+    });
+
+    roadmapContainer.appendChild(ul);
+}
+
+function getRoadmapSteps(domain) {
+    switch (domain) {
+        case "frontend":
+            return [
+                "1-hafta: HTML va CSS asoslari, oddiy landing page yasash.",
+                "2-hafta: JavaScript asoslari (o‘zgaruvchilar, funksiya, DOM).",
+                "3-hafta: Responsiv dizayn va kichik portfolio sahifa.",
+                "4-hafta: React’ga kirish va 1–2 ta kichik componentli loyiha."
+            ];
+        case "backend":
+            return [
+                "1-hafta: Node.js asoslari va JavaScript’ni kuchaytirish.",
+                "2-hafta: Express orqali REST API yozish (GET/POST).",
+                "3-hafta: Ma’lumotlar bazasi (Postgres yoki MongoDB) bilan bog‘lash.",
+                "4-hafta: Auth + CRUD bo‘lgan kichik backend loyiha."
+            ];
+        case "data":
+            return [
+                "1-hafta: Python sintaksisi va asosiy kutubxonalar (NumPy, Pandas).",
+                "2-hafta: Ma’lumot tozalash, filtr va guruhlash amaliyotlari.",
+                "3-hafta: Oddiy vizualizatsiya (Matplotlib/Seaborn).",
+                "4-hafta: ML’ga kirish: regressiya yoki klassifikatsiya misoli."
+            ];
+        case "mobile":
+            return [
+                "1-hafta: Flutter yoki React Native’dan birini tanlab olish.",
+                "2-hafta: UI widget/componentlar bilan tanishish.",
+                "3-hafta: Lokal state va oddiy todo yoki calculator ilova.",
+                "4-hafta: Backendga ulanish, kichik real app (masalan, note-taking)."
+            ];
+        default:
+            return [];
+    }
+}
+
+function copySummary(results) {
+    const name = userInfo.name || "Foydalanuvchi";
+    const level = getLevelLabel(userInfo.level);
+    const lines = [];
+
+    lines.push(`IT yo‘nalish moslik testi natijalari`);
+    lines.push(`Ism: ${name}`);
+    lines.push(`Daraja: ${level}`);
+    lines.push("");
+
+    results.forEach((r) => {
+        if (r.score === 0)
+            return;
+        lines.push(`${DOMAIN_LABELS[r.domain]}:${r.pct}%`);
+    });
+
+    const text = lines.join("\n");
+
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text)
+            .then(() => {
+                alert("Natija matni clipboard’ga nusxalandi. Endi uni istalgan joyga paste qilishingiz mumkin.");
+            })
+            .catch((err) => {
+                console.error("Clipboard xatosi:", err);
+                fallbackCopy(text);
+            });
+    } else {
+        fallbackCopy(text);
+    }
+}
+
+function fallbackCopy(text) {
+    window.prompt("Quyidagi matnni qo‘lda nusxa oling (Ctrl+C):", text);
+    // prompt yopilgach hech narsa qilish shart emas
 }
