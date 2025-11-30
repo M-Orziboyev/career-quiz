@@ -277,6 +277,154 @@ p {
     margin-bottom: 4px;
     color: #374151;
 }
+@media (max-width: 1024px) {
+    .page {
+        max-width: 900px;
+        padding: 24px 16px 32px;
+    }
+
+    .header-grid {
+        gap: 24px;
+    }
+
+    .info-section,
+    #quiz-screen,
+    #result-screen {
+        padding: 20px 18px 22px;
+    }
+}
+@media (max-width: 768px) {
+    .page {
+        max-width: 100%;
+        padding: 20px 12px 28px;
+    }
+
+    /* Header markazga yaqinroq bo'lsin */
+    .header {
+        margin-bottom: 28px;
+    }
+
+    .header-grid {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 20px;
+    }
+
+    .header h1 {
+        font-size: 24px;
+    }
+
+    .header-subtitle {
+        font-size: 14px;
+    }
+
+    /* Info va how bo'limlari bir ustun */
+    .info-grid,
+    .how-steps {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .info-section {
+        margin-bottom: 28px;
+        padding: 18px 14px 20px;
+    }
+
+    .how-section {
+        margin-bottom: 28px;
+    }
+
+    /* Start card ekranga mos, biroz kichik padding */
+    .start-card {
+        max-width: 100%;
+        padding: 18px 14px 20px;
+    }
+
+    /* Quiz va result cardlar */
+    #quiz-screen,
+    #result-screen {
+        padding: 18px 14px 20px;
+        margin-bottom: 24px;
+    }
+
+    #question-text {
+        font-size: 15px;
+    }
+
+    .option-card {
+        padding: 9px 12px;
+        font-size: 14px;
+    }
+
+    .quiz-actions {
+        flex-direction: row;
+        gap: 8px;
+    }
+
+    .quiz-actions .btn {
+        flex: 1;
+        text-align: center;
+    }
+
+    .result-actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .result-actions .btn {
+        width: 100%;
+        text-align: center;
+    }
+
+    /* FAQ bo'limi biroz ixchamroq */
+    .faq-section {
+        margin-top: 24px;
+        padding-top: 14px;
+    }
+}
+@media (max-width: 480px) {
+    .page {
+        padding: 16px 10px 24px;
+    }
+
+    .header {
+        margin-bottom: 22px;
+    }
+
+    .header-top-tag {
+        font-size: 10px;
+    }
+
+    .header h1 {
+        font-size: 22px;
+    }
+
+    .header-bullets {
+        font-size: 13px;
+    }
+
+    .btn,
+    .btn.primary {
+        font-size: 13px;
+        padding: 8px 14px;
+    }
+
+    /* User chip biroz kichrayadi */
+    .user-chip {
+        font-size: 11px;
+        padding: 3px 8px;
+    }
+
+    /* Toastlar kattaligini ham moslaymiz */
+    #toast-container {
+        right: 10px;
+        left: 10px;
+        align-items: center;
+    }
+
+    .toast {
+        width: 100%;
+        max-width: 360px;
+    }
+}
 
 .form-group input,
 .form-group select {
