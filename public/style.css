@@ -425,6 +425,151 @@ p {
         max-width: 360px;
     }
 }
+/* ====== GENERIC SECTION-CARD LAYOUT ====== */
+
+.section-card {
+    background: #ffffff;
+    border-radius: 22px;
+    padding: 26px 24px 30px;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 14px 38px rgba(15,23,42,0.06);
+    margin-bottom: 40px;
+}
+
+.section-card > h2 {
+    font-size: 20px;
+    margin-bottom: 12px;
+}
+
+.section-card > p {
+    font-size: 14px;
+    color: #4b5563;
+}
+#problem-solution .two-col {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 24px;
+}
+
+#problem-solution h3 {
+    font-size: 16px;
+    margin-bottom: 6px;
+}
+
+#problem-solution p {
+    font-size: 14px;
+    color: #4b5563;
+}
+
+/* chap taraf (Muammo)ni biroz ajratib ko'rsatamiz */
+#problem-solution .two-col > div:first-child {
+    border-left: 3px solid #ef4444;
+    padding-left: 12px;
+}
+
+/* o'ng taraf (Yechim)ni ham rang bilan ajratamiz */
+#problem-solution .two-col > div:last-child {
+    border-left: 3px solid #16a34a;
+    padding-left: 12px;
+}
+/* ====== JAMOA ====== */
+
+#team-section h2 {
+    margin-bottom: 10px;
+}
+
+#team-section > p {
+    margin-bottom: 10px;
+}
+
+.team-grid {
+    margin-top: 12px;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+}
+
+.team-card {
+    background: #f9fafb;
+    border-radius: 16px;
+    padding: 14px 14px 16px;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 8px 20px rgba(15,23,42,0.03);
+    font-size: 13px;
+}
+
+.team-card h3 {
+    font-size: 15px;
+    margin-bottom: 6px;
+    font-weight: 600;
+}
+
+.team-card p {
+    font-size: 13px;
+    color: #374151;
+    margin-bottom: 3px;
+}
+
+/* Tech stack ro'yxati */
+#team-section ul {
+    margin-top: 10px;
+    padding-left: 18px;
+    font-size: 13px;
+    color: #4b5563;
+}
+
+#team-section ul li + li {
+    margin-top: 3px;
+}
+/* ====== WHY US (NEGA BIZ) ====== */
+
+#why-us p {
+    font-size: 14px;
+    color: #4b5563;
+    max-width: 760px;
+}
+/* ====== ROADMAP ====== */
+
+.steps-roadmap {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 14px;
+    margin-top: 16px;
+}
+
+.step {
+    background: #f9fafb;
+    border-radius: 16px;
+    padding: 14px 12px 14px;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 8px 20px rgba(15,23,42,0.03);
+    font-size: 13px;
+    color: #4b5563;
+    position: relative;
+}
+
+.step h3 {
+    font-size: 15px;
+    margin-bottom: 4px;
+}
+
+/* Yuqorida kichik "pill" effekti beramiz */
+.step h3::before {
+    content: "";
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    width: 6px;
+    height: 6px;
+    border-radius: 999px;
+    background: #2563eb;
+}
+
+/* sarlavhani ozgina o'ngga surib qo'yamiz */
+.step h3 {
+    padding-left: 12px;
+}
+
 
 .form-group input,
 .form-group select {

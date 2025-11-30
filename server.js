@@ -1,93 +1,125 @@
 const express = require("express");
 const path = require("path");
-const fs = require("fs");
 const app = express();
 const PORT = 3000;
+const db = require("./db");
 
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "public")));
 
 // Natijalarni saqlash API
 app.post("/api/save_results", (req, res) => {
-    const data = req.body || {};
-    const line = JSON.stringify(data) + "\n";
+    const body = req.body || {};
+    const timestamp = body.timestamp || new Date().toISOString();
+    const user = body.user || {};
+    const results = body.results || [];
 
-    const filePath = path.join(__dirname, "results.log");
+    const name = user.name || null;
+    const level = user.level || null;
 
-    fs.appendFile(filePath, line, (err) => {
-        if (err) {
-            console.error("Natijani faylga yozishda xato:", err);
-            return res.status(500).json({ ok: false });
+    // Domenlar bo'yicha foizlarni ajratib olamiz
+    // results: [{domain, pct, score}, ...]
+    let frontendPct = 0;
+    let backendPct = 0;
+    let dataPct = 0;
+    let mobilePct = 0;
+
+    results.forEach((r) => {
+        switch (r.domain) {
+            case "frontend":
+                frontendPct = r.pct;
+                break;
+            case "backend":
+                backendPct = r.pct;
+                break;
+            case "data":
+                dataPct = r.pct;
+                break;
+            case "mobile":
+                mobilePct = r.pct;
+                break;
+            default:
+                break;
         }
-        return res.json({ ok: true });
     });
-});
 
+    const rawJson = JSON.stringify({ user, results });
+
+    try {
+        const stmt = db.prepare(`
+            INSERT INTO results (
+            timestamp, name, level,
+            frontend_pct, backend_pct, data_pct, mobile_pct,
+            raw_json
+        ) VALUES ()
+    `);
+
+        stmt.run(
+            timestamp,
+            name,
+            level,
+            frontendPct,
+            backendPct,
+            dataPct,
+            mobilePct,
+            rawJson
+        );
+
+        return res.json({ ok: true });
+    } catch (err) {
+        console.error("Natijani DBga yozishda xato:", err);
+        return res.status(500).json({ ok: false });
+    }
+});
 // ✅ Umumiy statistika API
 app.get("/api/stats", (req, res) => {
-    const filePath = path.join(__dirname, "results.log");
+    try {
+        // Umumiy foydalanuvchilar soni
+        const totalRow = db.prepare(`SELECT COUNT(*) as count FROM results`).get();
+        const totalUsers = totalRow.count || 0;
 
-    // Fayl bo'lmasa, bo'sh statistika qaytaramiz
-    if (!fs.existsSync(filePath)) {
-        return res.json({
-            totalUsers: 0,
-            domains: [],
-        });
-    }
-
-    fs.readFile(filePath, "utf8", (err, content) => {
-        if (err) {
-            console.error("Statistikani o'qishda xato:", err);
-            return res.status(500).json({ ok: false });
+        if (totalUsers === 0) {
+            return res.json({
+                totalUsers: 0,
+                domains: [],
+            });
         }
 
-        const lines = content.split("\n").filter((l) => l.trim().length > 0);
+        // Har bir domen bo'yicha o'rtacha foiz va nechta yozuvda qatnashganini chiqarish
+        // Eslatma: bu yerda har yozuvda 0 bo'lsa ham bor, lekin o'rtacha hisoblash uchun normal
+        const rows = db.prepare(`
+            SELECT
+        AVG(frontend_pct) AS frontend_avg,
+            AVG(backend_pct)  AS backend_avg,
+            AVG(data_pct)     AS data_avg,
+            AVG(mobile_pct)   AS mobile_avg,
+        COUNT(*)          AS cnt
+        FROM results`
+    ).get();
 
-        let totalUsers = 0;
-        const domainStats = {}; // {frontend: {sumPct: x, count: y}, ...}
+        // Domen bo'yicha struktura tayyorlaymiz
+        const domains = [
+            { domain: "frontend", averagePct: Math.round(rows.frontend_avg || 0), answersCount: rows.cnt },
+            { domain: "backend",  averagePct: Math.round(rows.backend_avg || 0),  answersCount: rows.cnt },
+            { domain: "data",     averagePct: Math.round(rows.data_avg || 0),     answersCount: rows.cnt },
+            { domain: "mobile",   averagePct: Math.round(rows.mobile_avg || 0),   answersCount: rows.cnt },
+        ];
 
-        lines.forEach((line) => {
-            try {
-                const obj = JSON.parse(line);
-                const results = obj.results || [];
-                if (!Array.isArray(results) || results.length === 0) return;
+        // 0 bo'lganlarini xohlasing filtrlasak ham bo'ladi:
+        const filtered = domains.filter(d => d.averagePct > 0);
 
-                totalUsers += 1;
+        // Katta foizdan kichigiga tartiblaymiz
+        filtered.sort((a, b) => b.averagePct - a.averagePct);
 
-                results.forEach((r) => {
-                    const d = r.domain;
-                    const pct = Number(r.pct) || 0;
-
-                    if (!domainStats[d]) {
-                        domainStats[d] = { sumPct: 0, count: 0 };
-                    }
-                    domainStats[d].sumPct += pct;
-                    domainStats[d].count += 1;
-                });
-            } catch (e) {
-                console.error("JSON parse error:", e);
-            }
-        });
-
-        const domains = Object.entries(domainStats).map(([domain, stat]) => {
-            const avg = stat.count > 0 ? Math.round(stat.sumPct / stat.count) : 0;
-            return {
-                domain,
-                averagePct: avg,
-                answersCount: stat.count,
-            };
-        });
-
-        // Katta foizdan kichigiga qarab sort
-        domains.sort((a, b) => b.averagePct - a.averagePct);
-
-        res.json({
+        return res.json({
             totalUsers,
-            domains,
+            domains: filtered,
         });
-    });
+    } catch (err) {
+        console.error("Statistikani DBdan o'qishda xato:", err);
+        return res.status(500).json({ ok: false });
+    }
 });
-
 app.listen(PORT, () => {
     console.log(`Server running on http://localhost:${PORT});`)
 })
