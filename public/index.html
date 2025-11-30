@@ -8,11 +8,90 @@
 <body>
 <div class="page">
     <header class="header">
-        <h1>Dasturlashdagi yo'lingizni bizning quiz orqali oson tanlang</h1>
-        <p>Bir nechta savollarga javob bering va sizga mos yo‘nalishlarni foizlarda bilib oling.</p>
-    </header>
+        <div class="header-top-tag">Beta versiya · 100% bepul test</div>
 
+        <div class="header-grid">
+            <div>
+                <h1>IT yo‘nalishda o‘zingizga eng mos yo‘lni toping</h1>
+                <p class="header-subtitle">
+                    15 ta savol orqali Frontend, Backend, Data yoki Mobile yo‘nalishlaridan qaysi biri sizga
+                    ko‘proq mos kelishini foizlarda ko‘rsatib beramiz.
+                </p>
+
+                <ul class="header-bullets">
+                    <li>Shaxsiylashtirilgan natija va qisqa roadmap</li>
+                    <li>Real dunyo savollari asosida qiziqish tahlili</li>
+                    <li>Hech qanday ro‘yxatdan o‘tishsiz, darhol natija</li>
+                </ul>
+
+                <button id="hero-start-btn" class="btn primary header-cta">
+                    Testni hozir boshlash
+                </button>
+
+                <p class="header-small-note">
+                    2–3 daqiqada tugaydi · Hech qanday texnik bilim talab qilinmaydi
+                </p>
+            </div>
+
+            <div class="header-card">
+                <p class="header-card-title">Bu test kimlar uchun?</p>
+                <ul>
+                    <li>ITga kirishni rejalashtirayotgan o‘quvchilar</li>
+                    <li>Yo‘nalishini aniqlay olmayotgan talabalar</li>
+                    <li>Boshqa sohani tark etib ITga o‘tayotganlar</li>
+                </ul>
+            </div>
+        </div>
+    </header>
     <main>
+        <!-- Info section -->
+        <section id="info-section" class="info-section">
+            <div class="info-pill-row">
+                <div class="info-pill">Kim uchun?</div>
+                <div class="info-pill">Nima beradi?</div>
+                <div class="info-pill">Qanday ishlaydi?</div>
+            </div>
+
+            <div class="info-grid">
+                <div>
+                    <h2>IT yo‘nalishini tanlashda adashmaslik uchun</h2>
+                    <p>
+                        Har bir insonning qiziqishi va kuchli tomoni boshqacha. Bu test sizning afzalliklaringizni
+                        Frontend, Backend, Data va Mobile yo‘nalishlari kontekstida tahlil qiladi.
+                    </p>
+                </div>
+                <div>
+                    <h3>Natijada nimaga ega bo‘lasiz?</h3>
+                    <ul>
+                        <li>Har bir yo‘nalish bo‘yicha foizlarda moslik</li>
+                        <li>Eng mos yo‘nalish uchun 4 haftalik mini-roadmap</li>
+                        <li>Natijani nusxa olib, mentor yoki do‘stlar bilan baham ko‘rish imkoniyati</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Qanday ishlaydi section -->
+        <section id="how-section" class="how-section">
+            <h2>Test qanday ishlaydi?</h2>
+            <div class="how-steps">
+                <div class="how-step">
+                    <span class="how-step-number">1</span>
+                    <h3>O‘zingiz haqingizda qisqacha</h3>
+                    <p>Ism va hozirgi tajribangiz haqida ma’lumot kiriting.</p>
+                </div>
+                <div class="how-step">
+                    <span class="how-step-number">2</span>
+                    <h3>15 ta savolga javob bering</h3>
+                    <p>Qiziqishingiz, sevimli fanlaringiz va kelajakdagi rejalaringizga doir savollar.</p>
+                </div>
+                <div class="how-step">
+                    <span class="how-step-number">3</span>
+                    <h3>Foizli natija va roadmap</h3>
+                    <p>Eng mos yo‘nalish bo‘yicha qisqa roadmap va barcha yo‘nalish bo‘yicha foizlar.</p>
+                </div>
+            </div>
+        </section>
         <section id="start-screen">
             <div class="start-card">
                 <h2>Testni boshlashdan oldin</h2>
@@ -77,10 +156,59 @@
                 <p id="stats-summary" class="stats-summary"></p>
                 <div id="stats-container"></div>
             </div>
+            <section id="faq-section" class="faq-section">
+                <h2>Ko‘p beriladigan savollar</h2>
+                <div class="faq-item">
+                    <button class="faq-question">
+                        Bu test qanchalik aniq ishlaydi?
+                    </button>
+                    <div class="faq-answer">
+                        <p>
+                            Test sizning qiziqishlaringiz va afzalliklaringizni tahlil qiladi. Bu psixometrik test emas,
+                            lekin IT yo‘nalishini tanlashda yo‘nalish beruvchi boshlang‘ich tahlil sifatida ishlaydi.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question">
+                        Texnik bilimim bo‘lmasa ham testdan o‘ta olamanmi?
+                    </button>
+                    <div class="faq-answer">
+                        <p>
+                            Ha. Savollar faqat sizning qiziqishingiz, sevimli fanlaringiz va ish uslubingizga asoslangan.
+                            Kod yozishni bilish shart emas.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question">
+                        Natijalar qayergadir saqlanadimi?
+                    </button>
+                    <div class="faq-answer">
+                        <p>
+                            Natijalaringiz anonim shaklda platforma statistikasini tuzish uchun saqlanishi mumkin.
+                            Ism va daraja faqat ta’limiy maqsadlarda ko‘rinadi, kontakt ma’lumotlari so‘ralmaydi.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question">
+                        Natija bo‘yicha kimdandir maslahat olmoqchi bo‘lsamchi?
+                    </button>
+                    <div class="faq-answer">
+                        <p>
+                            Natija matnini nusxa olib, mentor, o‘qituvchi yoki do‘stlaringiz bilan baham ko‘rishingiz
+                            mumkin. Ular bilan birga keyingi qadamlar bo‘yicha reja tuzib olsangiz yanada yaxshi bo‘ladi.
+                        </p>
+                    </div>
+                </div>
         </section>
     </main>
 </div>
-
+<div id="toast-container"></div>
 <script src="app.js"></script>
 </body>
 </html>

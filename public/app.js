@@ -199,7 +199,7 @@ const resultsContainer = document.getElementById("results-container");
 const userChip = document.getElementById("user-chip");
 const copyBtn = document.getElementById("copy-btn");
 const roadmapContainer = document.getElementById("roadmap-container");
-
+const heroStartBtn = document.getElementById("hero-start-btn");
 // Boshlash
 startBtn.addEventListener("click", () => {
     const name = (nameInput.value || "").trim();
@@ -261,6 +261,7 @@ restartBtn.addEventListener("click", () => {
 
     resultScreen.classList.add("hidden");
     startScreen.classList.remove("hidden");
+    showToast("Test qayta boshlandi", "info");
 });
 
 statsBtn.addEventListener("click", () => {
@@ -270,7 +271,39 @@ statsBtn.addEventListener("click", () => {
 copyBtn.addEventListener("click", () => {
     copySummary(lastResultsForCopy);
 });
+if (heroStartBtn) {
+    heroStartBtn.addEventListener("click", () => {
+        const startSection = document.getElementById("start-screen");
+        if (startSection) {
+            startSection.scrollIntoView({ behavior: "smooth" });
+        }
+    });
 
+const toastContainer = document.getElementById("toast-container");
+
+function showToast(message, type = "info", duration = 2500) {
+    if (!toastContainer) return;
+
+    const div = document.createElement("div");
+    div.className = "toast " + (type === "success"
+        ? "toast-success"
+        : type === "error"
+            ? "toast-error"
+            : "toast-info");
+
+    div.textContent = message;
+    toastContainer.appendChild(div);
+
+    setTimeout(() => {
+        div.style.opacity = "0";
+        div.style.transform = "translateY(10px)";
+        setTimeout(() => {
+            if (div.parentNode) {
+                div.parentNode.removeChild(div);
+            }
+        }, 200);
+    }, duration);
+}
 // Savolni render qilish
 function renderQuestion() {
     const q = QUESTIONS[currentIndex];
@@ -476,6 +509,7 @@ function loadStats() {
             statsSummary.textContent =
                 "Statistikani yuklashda xato yuz berdi. Keyinroq qayta urinib ko‘ring.";
             statsContainer.innerHTML = "";
+            showToast("Statistikani yuklashda xato yuz berdi", "error");
         });
 }
 
@@ -576,7 +610,10 @@ function copySummary(results) {
     if (navigator.clipboard && navigator.clipboard.writeText) {
         navigator.clipboard.writeText(text)
             .then(() => {
-                alert("Natija matni clipboard’ga nusxalandi. Endi uni istalgan joyga paste qilishingiz mumkin.");
+                showToast(
+                    "Natija matni clipboard’ga nusxalandi. Endi uni istalgan joyga paste qilishingiz mumkin.",
+                    "success"
+                );
             })
             .catch((err) => {
                 console.error("Clipboard xatosi:", err);
@@ -589,5 +626,26 @@ function copySummary(results) {
 
 function fallbackCopy(text) {
     window.prompt("Quyidagi matnni qo‘lda nusxa oling (Ctrl+C):", text);
-    // prompt yopilgach hech narsa qilish shart emas
-}
+}}
+const faqButtons = document.querySelectorAll(".faq-question");
+
+faqButtons.forEach((btn) => {
+    btn.addEventListener("click", () => {
+        const item = btn.closest(".faq-item");
+        if (!item) return;
+        const isOpen = item.classList.contains("open");
+
+        // boshqa FAQ larni yopish (agar faqat bittasi ochiq bo'lsin desak)
+        document.querySelectorAll(".faq-item.open").forEach((other) => {
+            if (other !== item) {
+                other.classList.remove("open");
+            }
+        });
+
+        if (!isOpen) {
+            item.classList.add("open");
+        } else {
+            item.classList.remove("open");
+        }
+    });
+});
