@@ -524,31 +524,31 @@ function getRoadmapSteps(domain) {
     switch (domain) {
         case "frontend":
             return [
-                "1-hafta: HTML va CSS asoslari, oddiy landing page yasash.",
-                "2-hafta: JavaScript asoslari (o‘zgaruvchilar, funksiya, DOM).",
-                "3-hafta: Responsiv dizayn va kichik portfolio sahifa.",
-                "4-hafta: React’ga kirish va 1–2 ta kichik componentli loyiha."
+                " HTML va CSS asoslari, oddiy landing page yasash.",
+                " JavaScript asoslari (o‘zgaruvchilar, funksiya, DOM).",
+                " Responsiv dizayn va kichik portfolio sahifa.",
+                " React’ga kirish va 1–2 ta kichik componentli loyiha."
             ];
         case "backend":
             return [
-                "1-hafta: Node.js asoslari va JavaScript’ni kuchaytirish.",
-                "2-hafta: Express orqali REST API yozish (GET/POST).",
-                "3-hafta: Ma’lumotlar bazasi (Postgres yoki MongoDB) bilan bog‘lash.",
-                "4-hafta: Auth + CRUD bo‘lgan kichik backend loyiha."
+                " Node.js asoslari va JavaScript’ni kuchaytirish.",
+                " Express orqali REST API yozish (GET/POST).",
+                " Ma’lumotlar bazasi (Postgres yoki MongoDB) bilan bog‘lash.",
+                " Auth + CRUD bo‘lgan kichik backend loyiha."
             ];
         case "data":
             return [
-                "1-hafta: Python sintaksisi va asosiy kutubxonalar (NumPy, Pandas).",
-                "2-hafta: Ma’lumot tozalash, filtr va guruhlash amaliyotlari.",
-                "3-hafta: Oddiy vizualizatsiya (Matplotlib/Seaborn).",
-                "4-hafta: ML’ga kirish: regressiya yoki klassifikatsiya misoli."
+                " Python sintaksisi va asosiy kutubxonalar (NumPy, Pandas).",
+                " Ma’lumot tozalash, filtr va guruhlash amaliyotlari.",
+                " Oddiy vizualizatsiya (Matplotlib/Seaborn).",
+                " ML’ga kirish: regressiya yoki klassifikatsiya misoli."
             ];
         case "mobile":
             return [
-                "1-hafta: Flutter yoki React Native’dan birini tanlab olish.",
-                "2-hafta: UI widget/componentlar bilan tanishish.",
-                "3-hafta: Lokal state va oddiy todo yoki calculator ilova.",
-                "4-hafta: Backendga ulanish, kichik real app (masalan, note-taking)."
+                " Flutter yoki React Native’dan birini tanlab olish.",
+                " UI widget/componentlar bilan tanishish.",
+                " Lokal state va oddiy todo yoki calculator ilova.",
+                " Backendga ulanish, kichik real app (masalan, note-taking)."
             ];
         default:
             return [];
